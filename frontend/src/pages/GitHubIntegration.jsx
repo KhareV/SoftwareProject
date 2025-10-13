@@ -278,52 +278,64 @@ export default function GitHubIntegration() {
 
   if (!connected) {
     return (
-      <div className="flex items-center justify-center min-h-[70vh]">
-        <div className="max-w-2xl mx-auto">
+      <div className="flex items-center justify-center min-h-[70vh] relative">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-500/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"
+            style={{ animationDelay: "1.5s" }}
+          ></div>
+        </div>
+
+        <div className="max-w-2xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass rounded-lg p-12 border border-light-200/10 text-center"
+            className="glass-card rounded-2xl p-12 border border-primary/20 text-center hover-lift shadow-glow-lg"
           >
-            <Github className="w-20 h-20 text-white mx-auto mb-6" />
-            <h1 className="text-3xl font-bold gradient-text mb-4">
+            <div className="p-6 bg-gradient-to-br from-primary-600/20 to-secondary-500/20 rounded-full inline-block mb-6 pulse-glow">
+              <Github className="w-20 h-20 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold gradient-text mb-4">
               Connect GitHub
             </h1>
-            <p className="text-light-200 mb-8">
+            <p className="text-light-300 text-lg mb-8">
               Connect your GitHub account to push code, manage repositories, and
-              analyze your projects.
+              analyze your projects with AI.
             </p>
 
-            <div className="bg-primary/10 border border-primary/30 rounded-lg p-6 mb-8 text-left">
-              <h3 className="font-semibold text-white mb-3">
+            <div className="bg-gradient-to-br from-primary-600/10 to-secondary-500/10 border border-primary/30 rounded-xl p-6 mb-8 text-left">
+              <h3 className="font-bold text-light-100 mb-4 flex items-center text-lg">
+                <Settings className="w-5 h-5 mr-2 text-primary-400" />
                 How to create a Personal Access Token:
               </h3>
-              <ol className="list-decimal list-inside space-y-2 text-sm text-light-200">
-                <li>
+              <ol className="list-decimal list-inside space-y-3 text-sm text-light-300">
+                <li className="pl-2">
                   Go to GitHub Settings → Developer settings → Personal access
                   tokens
                 </li>
-                <li>Click "Generate new token (classic)"</li>
-                <li>
+                <li className="pl-2">Click "Generate new token (classic)"</li>
+                <li className="pl-2">
                   Select scopes:{" "}
-                  <code className="bg-dark-300 px-2 py-1 rounded text-primary">
+                  <code className="bg-dark-300 px-2 py-1 rounded text-primary-400 font-mono text-xs">
                     repo
                   </code>
                   ,{" "}
-                  <code className="bg-dark-300 px-2 py-1 rounded text-primary">
+                  <code className="bg-dark-300 px-2 py-1 rounded text-primary-400 font-mono text-xs">
                     admin:repo_hook
                   </code>
                 </li>
-                <li>Generate token and copy it</li>
+                <li className="pl-2">Generate token and copy it</li>
               </ol>
             </div>
 
             <button
               onClick={connectGitHub}
               disabled={loading}
-              className="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-lg font-medium hover:opacity-90 disabled:opacity-50 flex items-center gap-2 mx-auto transition-all"
+              className="bg-gradient-to-r from-primary-600 via-secondary-500 to-accent text-white px-10 py-4 rounded-xl font-semibold shadow-glow hover:shadow-glow-lg disabled:opacity-50 flex items-center gap-3 mx-auto transition-all hover:scale-105"
             >
-              <Github className="w-5 h-5" />
+              <Github className="w-6 h-6" />
               {loading ? "Connecting..." : "Connect GitHub"}
             </button>
           </motion.div>

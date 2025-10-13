@@ -57,16 +57,20 @@ const Landing = () => {
 }`;
 
   return (
-    <div className="min-h-screen bg-dark-100">
+    <div className="min-h-screen bg-dark-100 relative overflow-hidden">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 sm:py-32">
         {/* Animated Background */}
         <div className="absolute inset-0 grid-pattern opacity-50"></div>
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse-slow morphing-blob"></div>
           <div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse-slow"
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse-slow morphing-blob"
             style={{ animationDelay: "1s" }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-accent/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"
+            style={{ animationDelay: "2s" }}
           ></div>
         </div>
 
@@ -78,10 +82,10 @@ const Landing = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="flex items-center justify-center mb-6">
-                <div className="flex items-center space-x-2 px-4 py-2 rounded-full glass">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  <span className="text-sm text-light-200">
-                    Powered by Google Gemini AI
+                <div className="flex items-center space-x-2 px-5 py-2 rounded-full glass-card border border-primary/20 hover-glow">
+                  <Zap className="w-4 h-4 text-yellow-400 animate-pulse" />
+                  <span className="text-sm font-semibold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                    Powered by Groq AI · Lightning Fast
                   </span>
                 </div>
               </div>
@@ -117,16 +121,29 @@ const Landing = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="mt-16 max-w-4xl mx-auto"
             >
-              <div className="glass rounded-2xl p-8 text-left">
-                <div className="flex items-center space-x-2 mb-4">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span className="text-sm text-light-200 ml-4">
-                    payment.js
-                  </span>
+              <div className="glass-card rounded-2xl p-8 text-left border border-primary/10 hover-lift shadow-glow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                    <div
+                      className="w-3 h-3 rounded-full bg-yellow-500 animate-pulse"
+                      style={{ animationDelay: "0.2s" }}
+                    ></div>
+                    <div
+                      className="w-3 h-3 rounded-full bg-green-500 animate-pulse"
+                      style={{ animationDelay: "0.4s" }}
+                    ></div>
+                    <span className="text-sm text-light-200 ml-4 font-mono">
+                      payment.js
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
+                      2 vulnerabilities
+                    </span>
+                  </div>
                 </div>
-                <pre className="text-sm sm:text-base font-mono text-light-100 overflow-x-auto">
+                <pre className="text-sm sm:text-base font-mono text-light-100 overflow-x-auto bg-dark-200/50 rounded-lg p-4">
                   <code>{codeExample}</code>
                 </pre>
               </div>

@@ -72,20 +72,34 @@ const Analytics = () => {
   const complianceCount = Object.values(owaspCompliance).filter(Boolean).length;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 right-10 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"></div>
+        <div
+          className="absolute bottom-10 left-10 w-80 h-80 bg-secondary-500/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"
+          style={{ animationDelay: "1.5s" }}
+        ></div>
+      </div>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex items-center justify-between relative z-10"
       >
         <div>
-          <h1 className="text-4xl font-bold gradient-text mb-2">Analytics</h1>
-          <p className="text-light-200">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="p-3 bg-gradient-to-br from-primary-600 to-secondary-500 rounded-xl shadow-glow">
+              <TrendingUp className="w-7 h-7 text-white" />
+            </div>
+            <h1 className="text-5xl font-bold gradient-text">Analytics</h1>
+          </div>
+          <p className="text-light-300 text-lg">
             Comprehensive insights into your code quality trends
           </p>
         </div>
-        <div className="w-48">
+        <div className="w-56">
           <Select
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
@@ -99,53 +113,87 @@ const Analytics = () => {
       </motion.div>
 
       {/* Overview Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-light-200 text-sm mb-1">Avg Quality Score</p>
-              <p className="text-4xl font-bold text-light-100">{avgQuality}</p>
-              <p className="text-green-500 text-sm mt-2">
-                ↑ 12% from last period
-              </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="hover-lift">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-light-300 text-sm mb-2 font-medium">
+                  Avg Quality Score
+                </p>
+                <div className="flex items-baseline gap-2 mb-1">
+                  <p className="text-5xl font-bold text-white">{avgQuality}</p>
+                  <span className="text-2xl font-semibold text-light-400">
+                    /100
+                  </span>
+                </div>
+                <p className="text-green-400 text-sm mt-3 font-semibold flex items-center">
+                  <span className="mr-1">↑</span> 12% from last period
+                </p>
+              </div>
+              <div className="p-4 rounded-xl bg-gradient-to-br from-primary-600/20 to-primary-800/20 border border-primary/20 pulse-glow">
+                <TrendingUp className="w-8 h-8 text-primary-400" />
+              </div>
             </div>
-            <div className="p-3 rounded-lg bg-primary/20">
-              <TrendingUp className="w-8 h-8 text-primary" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-light-200 text-sm mb-1">Avg Security Score</p>
-              <p className="text-4xl font-bold text-light-100">{avgSecurity}</p>
-              <p className="text-green-500 text-sm mt-2">
-                ↑ 8% from last period
-              </p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="hover-lift">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-light-300 text-sm mb-2 font-medium">
+                  Avg Security Score
+                </p>
+                <div className="flex items-baseline gap-2 mb-1">
+                  <p className="text-5xl font-bold text-white">{avgSecurity}</p>
+                  <span className="text-2xl font-semibold text-light-400">
+                    /100
+                  </span>
+                </div>
+                <p className="text-green-400 text-sm mt-3 font-semibold flex items-center">
+                  <span className="mr-1">↑</span> 8% from last period
+                </p>
+              </div>
+              <div className="p-4 rounded-xl bg-gradient-to-br from-secondary-600/20 to-secondary-800/20 border border-secondary/20 pulse-glow">
+                <CheckCircle className="w-8 h-8 text-secondary-400" />
+              </div>
             </div>
-            <div className="p-3 rounded-lg bg-secondary/20">
-              <CheckCircle className="w-8 h-8 text-secondary" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-light-200 text-sm mb-1">OWASP Compliance</p>
-              <p className="text-4xl font-bold text-light-100">
-                {complianceCount}/10
-              </p>
-              <p className="text-yellow-500 text-sm mt-2">
-                {10 - complianceCount} categories need attention
-              </p>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="hover-lift">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-light-300 text-sm mb-2 font-medium">
+                  OWASP Compliance
+                </p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">
+                  {complianceCount}/10
+                </p>
+                <p className="text-yellow-400 text-sm mt-3 font-semibold">
+                  {10 - complianceCount} categories need attention
+                </p>
+              </div>
+              <div className="p-4 rounded-xl bg-gradient-to-br from-green-600/20 to-green-800/20 border border-green/20 pulse-glow">
+                <CheckCircle className="w-8 h-8 text-green-400" />
+              </div>
             </div>
-            <div className="p-3 rounded-lg bg-green-500/20">
-              <CheckCircle className="w-8 h-8 text-green-500" />
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </motion.div>
       </div>
 
       {/* Trends */}

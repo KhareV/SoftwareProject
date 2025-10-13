@@ -451,4 +451,25 @@ router.get(
   })
 );
 
+/**
+ * Get AI code review for any code
+ */
+router.post(
+  "/practice/code-review",
+  asyncHandler(async (req, res) => {
+    const { code, language, focusArea } = req.body;
+
+    if (!code || !language) {
+      return res.status(400).json({ error: "Code and language are required" });
+    }
+
+    const { getPersonalizedCodeReview } = await import(
+      "../services/challengeGenerator.js"
+    );
+    const review = await getPersonalizedCodeReview(code, language, focusArea);
+
+    res.json({ review });
+  })
+);
+
 export default router;

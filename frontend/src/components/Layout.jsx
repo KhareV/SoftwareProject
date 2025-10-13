@@ -30,9 +30,9 @@ const Layout = ({ children }) => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-dark-100">
+    <div className="min-h-screen bg-dark-100 relative">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 glass border-b border-light-200/10">
+      <header className="fixed top-0 left-0 right-0 z-40 glass-card border-b border-primary/10 backdrop-blur-xl">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -47,8 +47,8 @@ const Layout = ({ children }) => {
                   <Menu className="w-6 h-6" />
                 )}
               </button>
-              <Link to="/" className="flex items-center space-x-2">
-                <div className="p-2 bg-gradient-to-br from-primary to-secondary rounded-lg">
+              <Link to="/" className="flex items-center space-x-2 group">
+                <div className="p-2 bg-gradient-to-br from-primary-600 to-secondary-500 rounded-xl shadow-glow group-hover:shadow-glow-lg transition-all duration-300 group-hover:scale-110">
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-xl font-bold gradient-text">
@@ -64,12 +64,12 @@ const Layout = ({ children }) => {
                   key={item.name}
                   to={item.href}
                   className={`
-                    flex items-center px-4 py-2 rounded-lg text-sm font-medium
-                    transition-all duration-200
+                    flex items-center px-4 py-2 rounded-xl text-sm font-medium
+                    transition-all duration-300
                     ${
                       isActive(item.href)
-                        ? "bg-primary text-white"
-                        : "text-light-200 hover:text-light-100 hover:bg-dark-300"
+                        ? "bg-gradient-to-r from-primary-600 to-secondary-500 text-white shadow-glow"
+                        : "text-light-200 hover:text-light-100 hover:bg-dark-300/50 hover:shadow-md"
                     }
                   `}
                 >
@@ -149,26 +149,40 @@ const Layout = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="glass border-t border-light-200/10 mt-auto">
+      <footer className="glass-card border-t border-primary/10 mt-auto backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <Shield className="w-5 h-5 text-primary" />
-              <span className="text-light-200">
+              <div className="p-1.5 bg-gradient-to-br from-primary-600 to-secondary-500 rounded-lg">
+                <Shield className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-light-300 text-sm">
                 © 2024 CodeReview.AI. All rights reserved.
               </span>
             </div>
-            <div className="flex items-center space-x-6 text-sm text-light-200">
-              <a href="#" className="hover:text-light-100 transition-colors">
+            <div className="flex items-center space-x-6 text-sm text-light-300">
+              <a
+                href="#"
+                className="hover:text-primary-400 transition-all hover:underline underline-offset-4"
+              >
                 Privacy
               </a>
-              <a href="#" className="hover:text-light-100 transition-colors">
+              <a
+                href="#"
+                className="hover:text-primary-400 transition-all hover:underline underline-offset-4"
+              >
                 Terms
               </a>
-              <a href="#" className="hover:text-light-100 transition-colors">
+              <a
+                href="#"
+                className="hover:text-primary-400 transition-all hover:underline underline-offset-4"
+              >
                 Docs
               </a>
-              <a href="#" className="hover:text-light-100 transition-colors">
+              <a
+                href="#"
+                className="hover:text-primary-400 transition-all hover:underline underline-offset-4"
+              >
                 Support
               </a>
             </div>

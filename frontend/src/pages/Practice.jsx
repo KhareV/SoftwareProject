@@ -395,40 +395,51 @@ ${code}`;
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-20 w-80 h-80 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"></div>
+        <div
+          className="absolute bottom-20 left-20 w-96 h-96 bg-secondary-500/10 rounded-full blur-3xl animate-pulse-slow morphing-blob"
+          style={{ animationDelay: "1.5s" }}
+        ></div>
+      </div>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex items-center justify-between relative z-10"
       >
         <div>
-          <h1 className="text-4xl font-bold gradient-text mb-2 flex items-center gap-3">
-            <Trophy className="w-10 h-10 text-primary" />
-            Code Practice
-          </h1>
-          <p className="text-light-200">
+          <div className="flex items-center gap-4 mb-3">
+            <div className="p-3 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-xl shadow-glow">
+              <Trophy className="w-7 h-7 text-white" />
+            </div>
+            <h1 className="text-5xl font-bold gradient-text">Code Practice</h1>
+          </div>
+          <p className="text-light-300 text-lg">
             Master coding skills with AI-generated challenges
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <button
             onClick={() => setView("browse")}
-            className={`px-4 py-2 rounded-lg transition-all ${
+            className={`px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
               view === "browse"
-                ? "bg-primary text-white"
-                : "glass text-light-200 hover:bg-dark-300"
+                ? "bg-gradient-to-r from-primary-600 to-secondary-500 text-white shadow-glow"
+                : "glass-card text-light-200 hover:bg-dark-300 border border-primary/10"
             }`}
           >
             Browse
           </button>
           <button
             onClick={() => setView("stats")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium transition-all duration-300 ${
               view === "stats"
-                ? "bg-primary text-white"
-                : "glass text-light-200 hover:bg-dark-300"
+                ? "bg-gradient-to-r from-primary-600 to-secondary-500 text-white shadow-glow"
+                : "glass-card text-light-200 hover:bg-dark-300 border border-primary/10"
             }`}
           >
             <Trophy className="w-4 h-4" />
@@ -919,49 +930,202 @@ ${code}`;
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`rounded-lg p-6 border-2 ${
-                  evaluation.passed
-                    ? "bg-green-500/10 border-green-500"
-                    : "bg-red-500/10 border-red-500"
-                }`}
+                className="space-y-4"
               >
-                <div className="flex items-center gap-2 mb-4">
-                  {evaluation.passed ? (
-                    <CheckCircle className="w-6 h-6 text-green-400" />
-                  ) : (
-                    <XCircle className="w-6 h-6 text-red-400" />
-                  )}
-                  <h3 className="text-xl font-bold text-white">
-                    {evaluation.passed
-                      ? "All Tests Passed!"
-                      : "Some Tests Failed"}
-                  </h3>
-                </div>
+                {/* Overall Result */}
+                <div
+                  className={`rounded-lg p-6 border-2 ${
+                    evaluation.passed
+                      ? "bg-green-500/10 border-green-500"
+                      : "bg-red-500/10 border-red-500"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      {evaluation.passed ? (
+                        <CheckCircle className="w-6 h-6 text-green-400" />
+                      ) : (
+                        <XCircle className="w-6 h-6 text-red-400" />
+                      )}
+                      <h3 className="text-xl font-bold text-white">
+                        {evaluation.passed
+                          ? "All Tests Passed! 🎉"
+                          : "Keep Trying! 💪"}
+                      </h3>
+                    </div>
 
-                <div className="space-y-2 text-sm text-light-200">
-                  <div>
-                    Score:{" "}
-                    <span className="font-bold text-white">
-                      {evaluation.score}/100
-                    </span>
+                    {evaluation.efficiencyRating && (
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          evaluation.efficiencyRating === "Optimal"
+                            ? "bg-green-500/20 text-green-400"
+                            : evaluation.efficiencyRating === "Good"
+                            ? "bg-blue-500/20 text-blue-400"
+                            : evaluation.efficiencyRating === "Average"
+                            ? "bg-yellow-500/20 text-yellow-400"
+                            : "bg-orange-500/20 text-orange-400"
+                        }`}
+                      >
+                        {evaluation.efficiencyRating}
+                      </span>
+                    )}
                   </div>
-                  <div>Time: {evaluation.timeComplexity}</div>
-                  <div>Space: {evaluation.spaceComplexity}</div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div className="bg-dark-300/50 rounded-lg p-3">
+                      <div className="text-light-300 mb-1">Score</div>
+                      <div className="text-2xl font-bold text-white">
+                        {evaluation.score}
+                        <span className="text-sm text-light-300">/100</span>
+                      </div>
+                    </div>
+                    {evaluation.codeQualityScore && (
+                      <div className="bg-dark-300/50 rounded-lg p-3">
+                        <div className="text-light-300 mb-1">Code Quality</div>
+                        <div className="text-2xl font-bold text-primary-400">
+                          {evaluation.codeQualityScore}
+                          <span className="text-sm text-light-300">/100</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="bg-dark-300/50 rounded-lg p-3">
+                      <div className="text-light-300 mb-1">Time</div>
+                      <div className="text-lg font-bold text-white">
+                        {evaluation.timeComplexity}
+                      </div>
+                    </div>
+                    <div className="bg-dark-300/50 rounded-lg p-3">
+                      <div className="text-light-300 mb-1">Space</div>
+                      <div className="text-lg font-bold text-white">
+                        {evaluation.spaceComplexity}
+                      </div>
+                    </div>
+                  </div>
+
+                  {evaluation.feedback && (
+                    <div className="mt-4 p-4 bg-dark-300/30 rounded-lg">
+                      <p className="text-light-200 leading-relaxed">
+                        {evaluation.feedback}
+                      </p>
+                    </div>
+                  )}
                 </div>
 
-                {evaluation.feedback && (
-                  <div className="mt-4 text-sm text-light-200">
-                    {evaluation.feedback}
+                {/* Strengths */}
+                {evaluation.strengths && evaluation.strengths.length > 0 && (
+                  <div className="glass rounded-lg p-5 border border-green-500/20">
+                    <h4 className="font-semibold text-green-400 mb-3 flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5" />
+                      Strengths
+                    </h4>
+                    <ul className="space-y-2">
+                      {evaluation.strengths.map((strength, idx) => (
+                        <li
+                          key={idx}
+                          className="text-sm text-light-200 flex items-start"
+                        >
+                          <span className="text-green-400 mr-2">✓</span>
+                          {typeof strength === "string"
+                            ? strength
+                            : strength.aspect || strength}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
 
+                {/* Improvements */}
+                {evaluation.improvements &&
+                  evaluation.improvements.length > 0 && (
+                    <div className="glass rounded-lg p-5 border border-yellow-500/20">
+                      <h4 className="font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5" />
+                        Areas for Improvement
+                      </h4>
+                      <div className="space-y-3">
+                        {evaluation.improvements.map((improvement, idx) => (
+                          <div
+                            key={idx}
+                            className="bg-dark-300/30 rounded-lg p-3"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <span className="font-medium text-white text-sm">
+                                {improvement.category ||
+                                  improvement.suggestion ||
+                                  improvement}
+                              </span>
+                              {improvement.priority && (
+                                <span
+                                  className={`text-xs px-2 py-1 rounded ${
+                                    improvement.priority === "High"
+                                      ? "bg-red-500/20 text-red-400"
+                                      : improvement.priority === "Medium"
+                                      ? "bg-yellow-500/20 text-yellow-400"
+                                      : "bg-blue-500/20 text-blue-400"
+                                  }`}
+                                >
+                                  {improvement.priority}
+                                </span>
+                              )}
+                            </div>
+                            {improvement.suggestion &&
+                              improvement.suggestion !==
+                                improvement.category && (
+                                <p className="text-light-200 text-sm">
+                                  {improvement.suggestion}
+                                </p>
+                              )}
+                            {improvement.example && (
+                              <pre className="mt-2 p-2 bg-dark-300 rounded text-xs text-light-200 overflow-x-auto">
+                                {improvement.example}
+                              </pre>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                {/* Alternative Approaches */}
+                {evaluation.alternativeApproaches &&
+                  evaluation.alternativeApproaches.length > 0 && (
+                    <div className="glass rounded-lg p-5 border border-primary-500/20">
+                      <h4 className="font-semibold text-primary-400 mb-3 flex items-center gap-2">
+                        <BookOpen className="w-5 h-5" />
+                        Alternative Approaches
+                      </h4>
+                      <div className="space-y-3">
+                        {evaluation.alternativeApproaches.map(
+                          (approach, idx) => (
+                            <div
+                              key={idx}
+                              className="bg-dark-300/30 rounded-lg p-3"
+                            >
+                              <div className="font-medium text-white mb-1">
+                                {approach.approach}
+                              </div>
+                              <p className="text-sm text-light-200 mb-2">
+                                {approach.description}
+                              </p>
+                              {approach.complexity && (
+                                <div className="text-xs text-light-300">
+                                  Complexity: {approach.complexity}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                 {/* Links to Analysis and GitHub */}
                 {(evaluation.analysisId || evaluation.githubCommit) && (
-                  <div className="mt-4 pt-4 border-t border-light-200/20 flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-3">
                     {evaluation.analysisId && (
                       <a
                         href={`/analyze/${evaluation.analysisId}`}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-lg transition-colors text-sm font-medium"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg transition-all hover:opacity-90 text-sm font-medium shadow-glow"
                       >
                         <Code2 className="w-4 h-4" />
                         View Detailed Analysis
