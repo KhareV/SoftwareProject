@@ -89,7 +89,9 @@ const Landing = () => {
                   </span>
                 </div>
               </div>
-
+              <h1 className="text-9xl sm:text-8xl font-bold mb-6 underline decoration-4 decoration-primary/30">
+                <span className="gradient-text">CodeReview.AI</span>
+              </h1>
               <h1 className="text-5xl sm:text-7xl font-bold mb-6">
                 <span className="gradient-text">AI-Powered</span>
                 <br />
