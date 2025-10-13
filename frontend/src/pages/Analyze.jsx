@@ -242,7 +242,9 @@ const Analyze = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => document.getElementById('file-upload-input')?.click()}
+                  onClick={() =>
+                    document.getElementById("file-upload-input")?.click()
+                  }
                   className="inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-300 px-6 py-3 text-base bg-dark-300 hover:bg-dark-200 text-light-100 border border-primary/20 hover:border-primary/40 shadow-lg cursor-pointer z-50"
                 >
                   <Upload className="w-5 h-5 mr-2" />
