@@ -991,13 +991,21 @@ ${code}`;
                     <div className="bg-dark-300/50 rounded-lg p-3">
                       <div className="text-light-300 mb-1">Time</div>
                       <div className="text-lg font-bold text-white">
-                        {evaluation.timeComplexity}
+                        {typeof evaluation.timeComplexity === "string"
+                          ? evaluation.timeComplexity
+                          : evaluation.timeComplexity?.complexity ||
+                            JSON.stringify(evaluation.timeComplexity) ||
+                            "N/A"}
                       </div>
                     </div>
                     <div className="bg-dark-300/50 rounded-lg p-3">
                       <div className="text-light-300 mb-1">Space</div>
                       <div className="text-lg font-bold text-white">
-                        {evaluation.spaceComplexity}
+                        {typeof evaluation.spaceComplexity === "string"
+                          ? evaluation.spaceComplexity
+                          : evaluation.spaceComplexity?.complexity ||
+                            JSON.stringify(evaluation.spaceComplexity) ||
+                            "N/A"}
                       </div>
                     </div>
                   </div>
@@ -1027,7 +1035,9 @@ ${code}`;
                           <span className="text-green-400 mr-2">✓</span>
                           {typeof strength === "string"
                             ? strength
-                            : strength.aspect || strength}
+                            : strength.aspect ||
+                              strength.details ||
+                              "Code strength identified"}
                         </li>
                       ))}
                     </ul>
@@ -1050,9 +1060,11 @@ ${code}`;
                           >
                             <div className="flex items-start justify-between mb-2">
                               <span className="font-medium text-white text-sm">
-                                {improvement.category ||
-                                  improvement.suggestion ||
-                                  improvement}
+                                {typeof improvement === "string"
+                                  ? improvement
+                                  : improvement.category ||
+                                    improvement.suggestion ||
+                                    "Improvement suggestion"}
                               </span>
                               {improvement.priority && (
                                 <span
@@ -1068,18 +1080,20 @@ ${code}`;
                                 </span>
                               )}
                             </div>
-                            {improvement.suggestion &&
+                            {typeof improvement === "object" &&
+                              improvement.suggestion &&
                               improvement.suggestion !==
                                 improvement.category && (
                                 <p className="text-light-200 text-sm">
                                   {improvement.suggestion}
                                 </p>
                               )}
-                            {improvement.example && (
-                              <pre className="mt-2 p-2 bg-dark-300 rounded text-xs text-light-200 overflow-x-auto">
-                                {improvement.example}
-                              </pre>
-                            )}
+                            {typeof improvement === "object" &&
+                              improvement.example && (
+                                <pre className="mt-2 p-2 bg-dark-300 rounded text-xs text-light-200 overflow-x-auto">
+                                  {improvement.example}
+                                </pre>
+                              )}
                           </div>
                         ))}
                       </div>
@@ -1102,16 +1116,25 @@ ${code}`;
                               className="bg-dark-300/30 rounded-lg p-3"
                             >
                               <div className="font-medium text-white mb-1">
-                                {approach.approach}
+                                {typeof approach === "string"
+                                  ? approach
+                                  : approach.approach || "Alternative approach"}
                               </div>
-                              <p className="text-sm text-light-200 mb-2">
-                                {approach.description}
-                              </p>
-                              {approach.complexity && (
-                                <div className="text-xs text-light-300">
-                                  Complexity: {approach.complexity}
-                                </div>
-                              )}
+                              {typeof approach === "object" &&
+                                approach.description && (
+                                  <p className="text-sm text-light-200 mb-2">
+                                    {approach.description}
+                                  </p>
+                                )}
+                              {typeof approach === "object" &&
+                                approach.complexity && (
+                                  <div className="text-xs text-light-300">
+                                    Complexity:{" "}
+                                    {typeof approach.complexity === "string"
+                                      ? approach.complexity
+                                      : JSON.stringify(approach.complexity)}
+                                  </div>
+                                )}
                             </div>
                           )
                         )}
