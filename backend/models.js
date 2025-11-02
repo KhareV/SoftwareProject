@@ -54,29 +54,32 @@ const vulnerabilitySchema = new mongoose.Schema(
 const metricsSchema = new mongoose.Schema(
   {
     complexity: Number,
+    cognitiveComplexity: Number,
     maintainability: Number,
     duplication: Number,
     linesOfCode: Number,
+    codeLines: Number,
+    commentLines: Number,
+    blankLines: Number,
     functions: Number,
     classes: Number,
+    interfaces: Number,
     comments: Number,
     commentRatio: Number,
+    averageMethodLength: Number,
+    maxNestingDepth: Number,
     technicalDebt: Number,
+    cohesion: Number,
+    coupling: Number,
   },
-  { _id: false }
+  { _id: false, strict: false }
 );
 
 const suggestionSchema = new mongoose.Schema(
   {
     type: {
       type: String,
-      enum: [
-        "refactoring",
-        "performance",
-        "security",
-        "style",
-        "documentation",
-      ],
+      required: true,
     },
     title: String,
     description: String,
@@ -84,11 +87,17 @@ const suggestionSchema = new mongoose.Schema(
       type: String,
       enum: ["High", "Medium", "Low"],
     },
+    effort: String,
+    impact: String,
+    category: String,
     originalCode: String,
     suggestedCode: String,
     lineNumber: Number,
+    benefits: [String],
+    tradeoffs: [String],
+    relatedPatterns: [String],
   },
-  { _id: false }
+  { _id: false, strict: false }
 );
 
 const analysisSchema = new mongoose.Schema({
@@ -117,6 +126,14 @@ const analysisSchema = new mongoose.Schema({
   },
   vulnerabilities: [vulnerabilitySchema],
   metrics: metricsSchema,
+  qualityMetrics: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
+  performanceMetrics: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
   qualityScore: {
     type: Number,
     min: 0,

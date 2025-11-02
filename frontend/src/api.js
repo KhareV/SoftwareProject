@@ -124,7 +124,24 @@ export const generatePDFReport = async (analysisId) => {
   const url = window.URL.createObjectURL(new Blob([response.data]));
   const link = document.createElement("a");
   link.href = url;
-  link.setAttribute("download", `analysis-${analysisId}.pdf`);
+  link.setAttribute("download", `CodeReview-AI-Analysis-${analysisId}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  return response.data;
+};
+
+export const generateExcelReport = async (analysisId) => {
+  const response = await api.get(`/reports/${analysisId}/excel`, {
+    responseType: "blob",
+  });
+
+  // Create download link
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `CodeReview-AI-Analysis-${analysisId}.xlsx`);
   document.body.appendChild(link);
   link.click();
   link.remove();

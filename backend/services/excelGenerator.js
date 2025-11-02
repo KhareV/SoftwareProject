@@ -21,11 +21,16 @@ export async function generateExcelReport(analysis, project) {
   ];
 
   summarySheet.addRows([
-    { metric: "Project Name", value: project.name },
-    { metric: "Language", value: project.language },
+    { metric: "Project Name", value: project?.name || "N/A" },
+    {
+      metric: "Language",
+      value: analysis.language || project?.language || "N/A",
+    },
     {
       metric: "Analysis Date",
-      value: new Date(analysis.createdAt).toLocaleDateString(),
+      value: new Date(
+        analysis.createdAt || analysis.timestamp
+      ).toLocaleDateString(),
     },
     { metric: "", value: "" },
     {

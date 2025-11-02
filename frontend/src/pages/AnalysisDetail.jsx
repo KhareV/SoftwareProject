@@ -9,6 +9,7 @@ import {
   Download,
   Calendar,
   FileCode,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Card, Loading } from "../components/Shared";
 import VulnerabilityCard from "../components/VulnerabilityCard";
@@ -16,7 +17,7 @@ import { QualityCircle, ComplexityChart } from "../components/Charts";
 import VulnerabilityTreemap from "../components/VulnerabilityTreemap";
 import MetricsRadarChart from "../components/MetricsRadarChart";
 import CodeViewer from "../components/CodeViewer";
-import { getAnalysis, generatePDFReport } from "../api";
+import { getAnalysis, generatePDFReport, generateExcelReport } from "../api";
 import { formatRelativeTime, countVulnerabilitiesBySeverity } from "../utils";
 import toast from "react-hot-toast";
 
@@ -51,10 +52,20 @@ export default function AnalysisDetail() {
   const handleDownloadReport = async () => {
     try {
       await generatePDFReport(id);
-      toast.success("Report downloaded!");
+      toast.success("PDF report downloaded!");
     } catch (error) {
       console.error("Failed to generate report:", error);
-      toast.error("Failed to generate report");
+      toast.error("Failed to generate PDF report");
+    }
+  };
+
+  const handleDownloadExcel = async () => {
+    try {
+      await generateExcelReport(id);
+      toast.success("Excel report downloaded!");
+    } catch (error) {
+      console.error("Failed to generate Excel report:", error);
+      toast.error("Failed to generate Excel report");
     }
   };
 
@@ -110,13 +121,22 @@ export default function AnalysisDetail() {
             </div>
           </div>
 
-          <button
-            onClick={handleDownloadReport}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity"
-          >
-            <Download className="w-4 h-4" />
-            Download Report
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleDownloadReport}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <Download className="w-4 h-4" />
+              PDF Report
+            </button>
+            <button
+              onClick={handleDownloadExcel}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <FileSpreadsheet className="w-4 h-4" />
+              Excel Report
+            </button>
+          </div>
         </div>
 
         {/* Practice Challenge Info */}

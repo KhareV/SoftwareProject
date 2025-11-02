@@ -7,6 +7,7 @@ import {
   Sparkles,
   FileCode,
   CheckCircle,
+  FileSpreadsheet,
 } from "lucide-react";
 import {
   Button,
@@ -21,7 +22,7 @@ import VulnerabilityCard from "../components/VulnerabilityCard";
 import { QualityCircle, ComplexityChart } from "../components/Charts";
 import VulnerabilityTreemap from "../components/VulnerabilityTreemap";
 import MetricsRadarChart from "../components/MetricsRadarChart";
-import { analyzeCode, generatePDFReport } from "../api";
+import { analyzeCode, generatePDFReport, generateExcelReport } from "../api";
 import {
   LANGUAGE_LIST,
   countVulnerabilitiesBySeverity,
@@ -134,7 +135,17 @@ const Analyze = () => {
       try {
         await generatePDFReport(result._id);
       } catch (error) {
-        alert("Failed to generate report");
+        alert("Failed to generate PDF report");
+      }
+    }
+  };
+
+  const handleDownloadExcel = async () => {
+    if (result?._id) {
+      try {
+        await generateExcelReport(result._id);
+      } catch (error) {
+        alert("Failed to generate Excel report");
       }
     }
   };
@@ -353,7 +364,14 @@ const Analyze = () => {
               icon={Download}
               onClick={handleDownloadReport}
             >
-              Download Report
+              PDF Report
+            </Button>
+            <Button
+              variant="outline"
+              icon={FileSpreadsheet}
+              onClick={handleDownloadExcel}
+            >
+              Excel Report
             </Button>
           </div>
 

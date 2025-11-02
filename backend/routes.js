@@ -9,7 +9,8 @@ import {
   calculateSecurityScore,
 } from "./groq.js";
 import { asyncHandler } from "./auth.js";
-import PDFDocument from "pdfkit";
+import { saveExcelToBuffer } from "./services/excelGenerator.js";
+import { generatePDFReport } from "./services/pdfGenerator.js";
 import enhancedAnalysisRoutes from "./routes/enhancedAnalysis.js";
 import practiceRoutes from "./routes/practice.js";
 import githubRoutes from "./routes/github.js";
@@ -115,6 +116,10 @@ router.post(
       ]);
 
     const vulnerabilities = securityResults;
+    const qualityMetrics = qualityResults;
+    const performanceMetrics = performanceResults;
+
+    // Extract for backwards compatibility
     const { metrics, qualityScore, codeSmells } = qualityResults;
     const { performanceScore } = performanceResults;
 
@@ -123,13 +128,13 @@ router.post(
       code,
       language,
       vulnerabilities,
-      codeSmells
+      codeSmells || []
     );
 
     // Calculate scores
     const securityScore = calculateSecurityScore(vulnerabilities);
     const owaspCompliance = checkOWASPCompliance(vulnerabilities);
-    const technicalDebtScore = metrics.technicalDebt || 0;
+    const technicalDebtScore = metrics?.technicalDebt || 0;
 
     // Create analysis record
     const analysis = await Analysis.create({
@@ -139,6 +144,8 @@ router.post(
       language,
       vulnerabilities,
       metrics,
+      qualityMetrics,
+      performanceMetrics,
       qualityScore,
       securityScore,
       performanceScore,
@@ -352,59 +359,51 @@ router.get(
     const analysis = await Analysis.findOne({
       _id: req.params.id,
       userId: req.userId,
-    }).populate("projectId", "name");
+    }).populate("projectId", "name language");
 
     if (!analysis) {
       return res.status(404).json({ error: "Analysis not found" });
     }
 
-    const doc = new PDFDocument();
+    // Use professional PDF generator
+    const doc = generatePDFReport(analysis, analysis.projectId);
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=analysis-${analysis._id}.pdf`
+      `attachment; filename=CodeReview-AI-Analysis-${analysis._id}.pdf`
     );
 
     doc.pipe(res);
+  })
+);
 
-    // Title
-    doc.fontSize(24).text("Code Analysis Report", { align: "center" });
-    doc.moveDown();
+// Generate Excel report
+router.get(
+  "/reports/:id/excel",
+  asyncHandler(async (req, res) => {
+    const analysis = await Analysis.findOne({
+      _id: req.params.id,
+      userId: req.userId,
+    }).populate("projectId", "name language");
 
-    // Metadata
-    doc.fontSize(12);
-    doc.text(`Project: ${analysis.projectId?.name || "N/A"}`);
-    doc.text(`Language: ${analysis.language}`);
-    doc.text(`Date: ${analysis.timestamp.toLocaleDateString()}`);
-    doc.moveDown();
+    if (!analysis) {
+      return res.status(404).json({ error: "Analysis not found" });
+    }
 
-    // Scores
-    doc.fontSize(16).text("Scores");
-    doc.fontSize(12);
-    doc.text(`Quality Score: ${analysis.qualityScore}/100`);
-    doc.text(`Security Score: ${analysis.securityScore}/100`);
-    doc.text(`Performance Score: ${analysis.performanceScore}/100`);
-    doc.moveDown();
+    // Generate Excel buffer
+    const buffer = await saveExcelToBuffer(analysis, analysis.projectId);
 
-    // Vulnerabilities
-    doc.fontSize(16).text("Vulnerabilities");
-    doc.fontSize(12);
-    analysis.vulnerabilities.forEach((vuln, idx) => {
-      doc.text(`${idx + 1}. [${vuln.severity}] ${vuln.title}`);
-      doc.text(`   ${vuln.description}`);
-      doc.moveDown(0.5);
-    });
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=CodeReview-AI-Analysis-${analysis._id}.xlsx`
+    );
 
-    // Metrics
-    doc.addPage();
-    doc.fontSize(16).text("Code Metrics");
-    doc.fontSize(12);
-    Object.entries(analysis.metrics.toObject()).forEach(([key, value]) => {
-      doc.text(`${key}: ${value}`);
-    });
-
-    doc.end();
+    res.send(buffer);
   })
 );
 
